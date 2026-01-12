@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div style={{ width: '60vw' }}>
         <Board></Board>
       </div>
     </>
