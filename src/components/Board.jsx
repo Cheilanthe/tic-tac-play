@@ -2,10 +2,18 @@ import { useState } from 'react'
 import Square from './Square'
 
 export default function Board() {
+  let statusMessage
   const letterX = 'X'
   const letterO = 'O'
   const [xIsNext, setXIsNext] = useState(true)
   const [squares, setSquares] = useState(Array(9).fill(null))
+
+  const styleForRow = {
+    display: 'flex',
+    'align-items': 'center',
+    'justify-content': 'space-evenly',
+    order: '3',
+  }
 
   function handleClick(i) {
     var resultMove = calculateWinner(squares)
@@ -19,22 +27,17 @@ export default function Board() {
     } else {
       nextSquares[i] = letterO
     }
-    changeStatus(xIsNext)
     setSquares(nextSquares)
     setXIsNext(!xIsNext)
   }
 
-  var status
-  function changeStatus(xIsNext, status) {
-    const winner = calculateWinner(squares)
-    if (squares[0] === null) {
-      status = 'Comienza el juego!'
-    } else if (winner) {
-      status = `El ganador es: ${winner}`
-    } else {
-      status = `El siguiente es ${xIsNext ? letterX : letterO}`
-    }
-    return status
+  const winner = calculateWinner(squares)
+  if (squares[0] === null) {
+    statusMessage = 'Comienza el juego!'
+  } else if (winner) {
+    statusMessage = `El ganador es: ${winner}`
+  } else {
+    statusMessage = `El siguiente es ${xIsNext ? letterX : letterO}`
   }
 
   function calculateWinner(squares) {
@@ -63,21 +66,32 @@ export default function Board() {
 
   return (
     <>
-      <div className='status'>{status}</div>
-      <div className='board-row'>
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-      </div>
-      <div className='board-row'>
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-      </div>
-      <div className='board-row'>
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      <div
+        style={{
+          display: 'flex',
+          'flex-direction': 'column',
+          justifyContent: 'space-evenly',
+          gap: '3em 2em',
+        }}
+      >
+        <div className='status' style={{ order: '1' }}>
+          {statusMessage}
+        </div>
+        <div className='board-row' style={styleForRow}>
+          <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+          <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+          <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+        </div>
+        <div className='board-row' style={styleForRow}>
+          <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+          <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+          <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+        </div>
+        <div className='board-row' style={styleForRow}>
+          <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+          <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+          <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+        </div>
       </div>
     </>
   )
